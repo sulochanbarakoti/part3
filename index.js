@@ -36,9 +36,16 @@ app.post('/api/persons',(request,response) =>{
     const person = request.body
     person.id = maxId + 1
 
-    persons = persons.concat(person)
-    console.log(persons)
-    response.json(persons)
+    if (person.content) {
+      persons = persons.concat(person)
+      console.log(persons)
+      response.json(persons)
+    } else {
+      response.status(400).json({
+        error: 'name must be unique'
+      })
+    }
+
 })
 
 app.get('/api/persons',(request,response)=>{
