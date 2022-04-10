@@ -2,6 +2,7 @@ const http = require('http')
 const express = require('express')
 const { response } = require('express')
 const res = require('express/lib/response')
+const { notEqual } = require('assert')
 
 const app = express()
 
@@ -30,6 +31,15 @@ let persons = [
     }
 ]
 
+app.post('/api/persons',(request,response) =>{
+    const maxId = persons.length > 0 ? Math.max(...persons.map(n=> n.id)) : 0
+    const person = request.body
+    person.id = maxId + 1
+
+    persons = persons.concat(person)
+    console.log(persons)
+    response.json(persons)
+})
 
 app.get('/api/persons',(request,response)=>{
     const peopleNumber = persons.length
