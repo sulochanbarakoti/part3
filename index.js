@@ -1,12 +1,15 @@
-const http = require('http')
-const express = require('express')
-const { response } = require('express')
-const res = require('express/lib/response')
-const { notEqual } = require('assert')
 
+const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
+
+morgan.token('body',(req,res) =>{
+  JSON.stringify(req.body)
+})
+
+app.use(morgan(':method :url :status :response-time ms - :res[content-length] :body - :req[content-length]'))
 
 let persons = [
     { 
@@ -38,7 +41,6 @@ app.post('/api/persons',(request,response) =>{
 
     if (person.content) {
       persons = persons.concat(person)
-      console.log(persons)
       response.json(persons)
     } else {
       response.status(400).json({
@@ -77,3 +79,7 @@ const PORT = 3001
 app.listen(PORT,()=>{
     console.log(`Server running on port ${PORT}`)
 })
+
+
+
+
